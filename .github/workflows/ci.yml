@@ -1,0 +1,64 @@
+name: Build and scan
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+
+jobs:
+  build-and-scan:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Create the empty environment file
+        run: touch .env
+
+      - name: Write the build configuration from repository secrets
+        env:
+          WIFI_SSID: ${{ secrets.WIFI_SSID }}
+          WIFI_PASS: ${{ secrets.WIFI_PASS }}
+          SPOTFLOW_KEY: ${{ secrets.SPOTFLOW_KEY }}
+        run: |
+          {
+            printf 'CONFIG_DEVOPS_WIFI_SSID="%s"\n' "$WIFI_SSID"
+            printf 'CONFIG_DEVOPS_WIFI_PWD="%s"\n' "$WIFI_PASS"
+            printf 'CONFIG_SPOTFLOW_INGEST_KEY="%s"\n' "$SPOTFLOW_KEY"
+          } > button-app/sdkconfig.ci
+
+      - name: Build the application
+        uses: devcontainers/ci@v0.3
+        with:
+          push: never
+          runCmd: |
+            cd button-app
+            export SDKCONFIG_DEFAULTS="sdkconfig.defaults;sdkconfig.ci"
+            idf.py build
+
+      - name: Scan the image
+        uses: devcontainers/ci@v0.3
+        with:
+          push: never
+          runCmd: |
+            cd button-app
+            set -o pipefail
+            strings build/button-app.bin \
+              | gitleaks stdin --config ../.gitleaks.toml -v --no-banner \
+                  --report-format json --report-path ../firmware-scan.json
+
+      - name: Upload the firmware
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: firmware
+          path: |
+            button-app/build/button-app.bin
+          if-no-files-found: error
+
+      - name: Upload the scan report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: scan-report
+          path: firmware-scan.json
+          if-no-files-found: warn

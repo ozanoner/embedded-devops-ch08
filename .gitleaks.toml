@@ -26,3 +26,9 @@ description = "Ignore empty cryptographic keys"
 regexes = [
     '''-----BEGIN [A-Z0-9 ]+-----\s*-----END [A-Z0-9 ]+-----''',
 ]
+
+[[allowlists]]
+description = "Ignore the workflows"
+paths = [
+  '''^.github/workflows/''',
+]
