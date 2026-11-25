@@ -16,3 +16,13 @@ paths = [
 id = "esp-wifi-credentials"
 regex = '''WIFI_(SSID|PASS)\s*=\s*"(.+)"'''
 secretGroup = 2
+
+[[rules]]
+id = "spotflow-key"
+regex = '''sf_ikv1_[A-Za-z0-9_-]+'''
+
+[[allowlists]]
+description = "Ignore empty cryptographic keys"
+regexes = [
+    '''-----BEGIN [A-Z0-9 ]+-----\s*-----END [A-Z0-9 ]+-----''',
+]
