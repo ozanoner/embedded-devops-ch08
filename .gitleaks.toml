@@ -1,0 +1,18 @@
+[extend]
+useDefault = true
+
+[[allowlists]]
+description = "Ignore tests and examples"
+paths = [
+  '''^button-app/managed_components/espressif__mqtt/test/''',
+  '''^button-app/managed_components/ozanoner__devops_easy_connect/examples/''',
+  '''(^|/)tmp/''',
+  '''(^|/)build/''',
+  '''(^|/)sdkconfig(\..+)?$''',
+
+]
+
+[[rules]]
+id = "esp-wifi-credentials"
+regex = '''WIFI_(SSID|PASS)\s*=\s*"(.+)"'''
+secretGroup = 2
