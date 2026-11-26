@@ -9,6 +9,7 @@
 #include "spotflow.h"
 #include "sdkconfig.h"
 #include "spotflow_ops.h"
+#include "secret_store.h"
 
 #define TEST_FLASH_LOGS 0
 #define TEST_CRASH 1
@@ -17,6 +18,11 @@ static const char *LOG_TAG = "app";
 static const char *WIFI_SSID = CONFIG_DEVOPS_WIFI_SSID;
 static const char *WIFI_PASS = CONFIG_DEVOPS_WIFI_PWD;
 static const int APP_BUTTON_GPIO = 0;
+
+static char wifi_ssid[STORE_SIZE] = {0};
+static char wifi_password[STORE_SIZE] = {0};
+static char spotflow_device_id[STORE_SIZE] = {0};
+static char spotflow_ingest_key[STORE_SIZE] = {0};
 
 static button_handle_t app_button = NULL;
 
@@ -31,8 +37,11 @@ void app_main(void)
     LogHistory_init();
 
     ESP_LOGI(LOG_TAG, "The app is starting...");
-    app_wifi_init(WIFI_SSID, WIFI_PASS, on_connected, NULL);
-    app_wifi_connect();
+    if (SecretStore_get_wifi(wifi_ssid, wifi_password) == ESP_OK)
+    {
+        app_wifi_init(wifi_ssid, wifi_password, on_connected, NULL);
+        app_wifi_connect();
+    }
 
     const button_config_t button_cfg = {0};
     const button_gpio_config_t gpio_cfg = {
@@ -69,6 +78,9 @@ static void app_long_press_cb(void *button_handle, void *usr_data)
 static void on_connected(void *arg)
 {
     ESP_LOGD(LOG_TAG, "Wi-Fi connected");
-    spotflow_init();
-    SpotflowOps_init();
+    if (SecretStore_get_spotflow(spotflow_device_id, spotflow_ingest_key) == ESP_OK)
+    {
+        spotflow_init_with_cred(spotflow_device_id, spotflow_ingest_key);
+        SpotflowOps_init();
+    }
 }
