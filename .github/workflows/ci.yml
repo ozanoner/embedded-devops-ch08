@@ -14,25 +14,12 @@ jobs:
       - name: Create the empty environment file
         run: touch .env
 
-      - name: Write the build configuration from repository secrets
-        env:
-          WIFI_SSID: ${{ secrets.WIFI_SSID }}
-          WIFI_PASS: ${{ secrets.WIFI_PASS }}
-          SPOTFLOW_KEY: ${{ secrets.SPOTFLOW_KEY }}
-        run: |
-          {
-            printf 'CONFIG_DEVOPS_WIFI_SSID="%s"\n' "$WIFI_SSID"
-            printf 'CONFIG_DEVOPS_WIFI_PWD="%s"\n' "$WIFI_PASS"
-            printf 'CONFIG_SPOTFLOW_INGEST_KEY="%s"\n' "$SPOTFLOW_KEY"
-          } > button-app/sdkconfig.ci
-
       - name: Build the application
         uses: devcontainers/ci@v0.3
         with:
           push: never
           runCmd: |
             cd button-app
-            export SDKCONFIG_DEFAULTS="sdkconfig.defaults;sdkconfig.ci"
             idf.py build
 
       - name: Scan the image
