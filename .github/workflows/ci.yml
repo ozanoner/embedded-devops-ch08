@@ -9,13 +9,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v4.4.0
 
       - name: Create the empty environment file
         run: touch .env
 
       - name: Build the application
-        uses: devcontainers/ci@v0.3
+        uses: devcontainers/ci@v0.3.1900000450
         with:
           push: never
           runCmd: |
@@ -23,7 +23,7 @@ jobs:
             idf.py build
 
       - name: Scan the image
-        uses: devcontainers/ci@v0.3
+        uses: devcontainers/ci@v0.3.1900000450
         with:
           push: never
           runCmd: |
@@ -35,7 +35,7 @@ jobs:
 
       - name: Upload the firmware
         if: success()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v4.6.2
         with:
           name: firmware
           path: |
@@ -44,7 +44,7 @@ jobs:
 
       - name: Upload the scan report
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v4.6.2
         with:
           name: scan-report
           path: firmware-scan.json
