@@ -8,7 +8,6 @@ sdkconfig.old
 
 # ESP-IDF Component Manager dependencies
 managed_components/
-dependencies.lock
 
 # Editor & IDE specific configurations
 .vscode/

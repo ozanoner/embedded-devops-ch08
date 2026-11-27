@@ -1,0 +1,95 @@
+dependencies:
+  espressif/button:
+    component_hash: 26345e8700d3c6435925f9a8f246d224f9c1b99f937c243fe400844eec514b4a
+    dependencies:
+    - name: espressif/cmake_utilities
+      registry_url: https://components.espressif.com
+      require: private
+      version: '*'
+    - name: idf
+      require: private
+      version: '>=4.0'
+    source:
+      registry_url: https://components.espressif.com/
+      type: service
+    version: 4.2.3
+  espressif/cbor:
+    component_hash: 3e20f5a7bffc497468e0740c2b7dfb2e33d629a565cbd2e6384ed22d36750ce4
+    dependencies:
+    - name: idf
+      require: private
+      version: '>=5.0'
+    source:
+      registry_url: https://components.espressif.com/
+      type: service
+    version: 7.1.0
+  espressif/cmake_utilities:
+    component_hash: afc935d5a93cda71ce3223b817de128d07484439d585e6fe613bde820e17f36a
+    dependencies:
+    - name: idf
+      require: private
+      version: '>=4.1'
+    source:
+      registry_url: https://components.espressif.com
+      type: service
+    version: 1.4.1
+  espressif/mqtt:
+    component_hash: fb18bc3b65aa8c94693a9811ffc322cca8a65d92d5ec84983d3e385080e3969c
+    dependencies:
+    - name: idf
+      require: private
+      version: '>=5.3'
+    source:
+      registry_url: https://components.espressif.com/
+      type: service
+    version: 1.1.0
+  idf:
+    source:
+      type: idf
+    version: 6.0.0
+  joltwallet/littlefs:
+    component_hash: f633efcd615b58206ec1b131591f7fc5b212716603ebc24697900aab71e9d3bd
+    dependencies:
+    - name: idf
+      require: private
+      version: '>=5.0'
+    source:
+      registry_url: https://components.espressif.com/
+      type: service
+    version: 1.23.3
+  ozanoner/devops_easy_connect:
+    component_hash: 969d54446bdd2906876bdfb7f7a47e56193dc22135b854ae7e3875f00fa4f799
+    dependencies:
+    - name: idf
+      version: '>=6.0.0'
+    source:
+      git: https://github.com/ozanoner/devops_easy_connect.git
+      path: .
+      type: git
+    version: 5645a2064ba767ff438927f3e6d847feace5c36c
+  spotflow/device_sdk:
+    component_hash: 95ab343e4e6ec22d25399d825d262ed09fe42001e66570e2a7ffddb92ac5b019
+    dependencies:
+    - name: idf
+      version: '>=5.0'
+    - name: espressif/cbor
+      version: ^7.1.0
+    - name: espressif/mqtt
+      registry_url: https://components.espressif.com/
+      rules:
+      - if: idf_version >= "6.0"
+      version: ^1.0.0
+    source:
+      git: https://github.com/ozanoner/spotflow-device-sdk.git
+      path: esp_idf/spotflow/device_sdk
+      type: git
+    version: 534ecbce1c09a05d2c3e4cbc3a78ff71b2bb6a69
+direct_dependencies:
+- espressif/button
+- idf
+- joltwallet/littlefs
+- ozanoner/devops_easy_connect
+- spotflow/device_sdk
+manifest_hash: 720b6e1d01f224b17e9e4c08be65946049ddfb00a3a2cd043cdc0ff11597232f
+target: esp32
+version: 3.0.0
