@@ -32,3 +32,10 @@ description = "Ignore the workflows"
 paths = [
   '''^.github/workflows/''',
 ]
+
+[[allowlists]]
+description = "Ignore the .env file"
+paths = [
+  '''^.env''',
+  '''^.env.*''',
+]
