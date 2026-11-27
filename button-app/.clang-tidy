@@ -1,0 +1,6 @@
+Checks: >
+  -*,
+  cert-*,
+  clang-analyzer-security.*
+WarningsAsErrors: '*'
+
