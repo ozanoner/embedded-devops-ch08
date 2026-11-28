@@ -7,6 +7,10 @@ permissions:
 jobs:
   build-and-scan:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
+      attestations: write
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4.4.0
@@ -32,6 +36,11 @@ jobs:
             strings build/button-app.bin \
               | gitleaks stdin --config ../.gitleaks.toml -v --no-banner \
                   --report-format json --report-path ../firmware-scan.json
+
+      - name: Attest the firmware
+        uses: actions/attest-build-provenance@v2.4.0
+        with:
+          subject-path: button-app/build/button-app.bin
 
       - name: Upload the firmware
         if: success()
